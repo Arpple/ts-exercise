@@ -22,6 +22,28 @@ describe('find warehouse space', () => {
 		expect(space).toBe(1)
 	})
 
+	it('warehouse cannot connect to the corridor', () => {
+		const input = [
+			'BBBB',
+			'BCDD',
+			'BBBB',
+		]
+
+		const space = Venue.getWarehouseSpace(input)
+		expect(space).toBe(1)
+	})
+
+	it('get maximum warehouse space', () => {
+		const input = [
+			'BBBBB',
+			'BCDDB',
+			'BBBBB',
+		]
+
+		const space = Venue.getWarehouseSpace(input)
+		expect(space).toBe(2)
+	})
+
 	it('example 1', () => {
 		const input = [
 			'BBO',

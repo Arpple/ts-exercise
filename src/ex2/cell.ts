@@ -1,25 +1,25 @@
-export namespace VenueMap {
-	export type Cell = {
+export namespace Cell {
+	export type T = {
 		x: number,
 		y: number,
 		label: string,
 	}
 
 	type Coordinate = string
-	export type Map = Record<Coordinate, Cell>
+	export type Map = Record<Coordinate, T>
 
 	export function createMap(): Map {
 		return {}
 	}
 
-	export function addCell(x: number, y: number, label: string) {
+	export function add(x: number, y: number, label: string) {
 		return (map: Map): Map => {
 			const isCoridor = label === 'O'
 			if (isCoridor) {
 				return map
 			}
 
-			const cell: Cell = {
+			const cell: T = {
 				x, y, label,
 			}
 
@@ -30,7 +30,7 @@ export namespace VenueMap {
 		}
 	}
 
-	export function get(map: Map, x: number, y: number): Cell | undefined {
+	export function get(map: Map, x: number, y: number): T | undefined {
 		return map[coordString(x, y)]
 	}
 
