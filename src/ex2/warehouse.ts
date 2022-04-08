@@ -8,66 +8,80 @@ export namespace Warehouse {
 		cells: Cell.T[],
 	}
 
-	export type Map = T[]
+	export type Map = {
+		warehouses: T[],
+	}
 
 	export function createMap(cellMap: Cell.Map): Map {
-		const newMap: Map = []
+		const newMap: Map = {
+			warehouses: []
+		}
 
 		return Cell.getCells(cellMap)
 			.reduce((map, cell) => {
 				const connectedWarehouses = getConnectedWarehouse(map, cell)
 				if (connectedWarehouses.length === 0) {
-					const newWarehouse: Warehouse.T = {
-						isVentilated: isVentilated(cellMap, cell),
-						label: cell.label,
-						cells: [cell],
-					}
-
 					return pipeWith(
 						map,
-						addWarehouse(newWarehouse),
+						addWarehouse(createWarehouse(cellMap, cell)),
 					)
-				}
 
-				if (connectedWarehouses.length === 1) {
+				} else if (connectedWarehouses.length === 1) {
 					const warehouse = connectedWarehouses[0]
 					warehouse.cells.push(cell)
 					warehouse.isVentilated = warehouse.isVentilated
 						|| isVentilated(cellMap, cell)
 
 					return map
-				}
 
-				const mergedWarehouse: Warehouse.T = {
-					isVentilated: connectedWarehouses.some((w) => w.isVentilated)
-						|| isVentilated(cellMap, cell),
-					label: cell.label,
-					cells: [
-						...connectedWarehouses.flatMap((w) => w.cells),
-						cell,
-					]
+				} else {
+					return pipeWith(
+						map,
+						removeWarehouses(connectedWarehouses),
+						addWarehouse(mergeWarehouses(connectedWarehouses, cellMap, cell)),
+					)
 				}
-
-				return pipeWith(
-					map,
-					removeWarehouses(connectedWarehouses),
-					addWarehouse(mergedWarehouse),
-				)
 			}, newMap)
 	}
 
 	export function getWarehouses(map: Map): T[] {
-		return map
+		return map.warehouses
+	}
+
+	function createWarehouse(cellMap: Cell.Map, cell: Cell.T): T {
+		return {
+			cells: [cell],
+			isVentilated: isVentilated(cellMap, cell),
+			label: cell.label,
+		}
+	}
+
+	function mergeWarehouses(warehouses: T[], cellMap: Cell.Map, cell: Cell.T): T {
+		return {
+			isVentilated: warehouses.some((w) => w.isVentilated)
+				|| isVentilated(cellMap, cell),
+			label: cell.label,
+			cells: [
+				...warehouses.flatMap((w) => w.cells),
+				cell,
+			]
+		}
 	}
 
 	function addWarehouse(warehouse: T) {
 		return (map: Map): Map => {
-			return [...map, warehouse]
+			return {
+				...map,
+				warehouses: [...map.warehouses, warehouse]
+			}
 		}
 	}
 
 	function removeWarehouses(warehouses: T[]) {
-		return (map: Map): Map => map.filter((w) => !warehouses.includes(w))
+		return (map: Map): Map => ({
+			...map,
+			warehouses: map.warehouses.filter((w) => !warehouses.includes(w))
+		})
 	}
 
 	function getConnectedWarehouse(map: Map, cell: Cell.T): T[] {
@@ -75,7 +89,7 @@ export namespace Warehouse {
 			return Math.abs(a.x - b.x) + Math.abs(a.y - b.y) === 1
 		}
 
-		return map
+		return map.warehouses
 			.filter((w) => w.label === cell.label)
 			.filter((w) => w.cells.find((c) => isCellConnected(c, cell)))
 	}

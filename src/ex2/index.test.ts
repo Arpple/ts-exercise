@@ -1,4 +1,4 @@
-import { Venue } from './venue'
+import { Venue } from './'
 
 describe('find warehouse space', () => {
 	it('should return 0 if there are no availble space', () => {
@@ -68,7 +68,7 @@ describe('find warehouse space', () => {
 		expect(space).toBe(3)
 	})
 
-	it.skip('big test', () => {
+	it('big test', () => {
 		const input = [
 			'EECBABCEBBBCDBACDEBDCDBECBBCDDAEBCOOCCAEDDDCADAOEOBBCDEDCDDBDODEDEEDDDAECEAECECDCOEBACCDCBCOAE',
 			'DCAAADBDCCADCBDOOEBECEBEAOBOADADBBDDCBDEOAEODAECEAAAAODCECBDCDBBOCOCAOODBECBEDDDEDBOCDCBBDBEAD',

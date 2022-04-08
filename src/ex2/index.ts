@@ -3,10 +3,10 @@ import { Warehouse } from './warehouse'
 
 export namespace Venue {
 	export function getWarehouseSpace(input: string[]): number {
-		const cellMap = parseMap(input)
+		const cellMap = parseCellMap(input)
 		const warehouseMap = Warehouse.createMap(cellMap)
 
-		return warehouseMap
+		return Warehouse.getWarehouses(warehouseMap)
 			.filter((w) => !w.isVentilated)
 			.reduce((maxSpace, warehouse) => {
 				const space = warehouse.cells.length
@@ -16,7 +16,7 @@ export namespace Venue {
 			}, 0)
 	}
 
-	function parseMap(input: string[]): Cell.Map {
+	function parseCellMap(input: string[]): Cell.Map {
 		return input.reduce(
 			(map, row, y) => {
 				const cellLabels = row.split('')
