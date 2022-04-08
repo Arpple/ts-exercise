@@ -33,7 +33,7 @@ describe('find warehouse space', () => {
 		expect(space).toBe(0)
 	})
 
-	it.only('get maximum warehouse space', () => {
+	it('get maximum warehouse space', () => {
 		const input = [
 			'BBBBB',
 			'BCCDB',

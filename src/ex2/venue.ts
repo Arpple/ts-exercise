@@ -5,9 +5,8 @@ export namespace Venue {
 	export function getWarehouseSpace(input: string[]): number {
 		const cellMap = parseMap(input)
 		const warehouseMap = Warehouse.createMap(cellMap)
-		// console.log(warehouseMap.warehouses.map((w) => w.cells.map(Cell.toString)))
 
-		return warehouseMap.warehouses
+		return warehouseMap
 			.filter((w) => !w.isVentilated)
 			.reduce((maxSpace, warehouse) => {
 				const space = warehouse.cells.length
