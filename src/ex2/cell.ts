@@ -34,7 +34,15 @@ export namespace Cell {
 		return map[coordString(x, y)]
 	}
 
+	export function getCells(map: Map): T[] {
+		return Object.values(map)
+	}
+
 	function coordString(x: number, y: number): string {
 		return `${x},${y}`
+	}
+
+	export function toString(cell: T): string {
+		return `(${cell.x}, ${cell.y}, ${cell.label})`
 	}
 }

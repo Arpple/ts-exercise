@@ -1,5 +1,5 @@
-import { Cell } from './cell'
 import { pipeWith } from 'pipe-ts'
+import { Cell } from './cell'
 
 describe('create and add cell', () => {
 	const map = pipeWith(
@@ -20,7 +20,7 @@ describe('create and add cell', () => {
 	})
 })
 
-describe('create and add corridor cell "O"', () => {
+describe('adding coridor cell "O"', () => {
 	it('should ignore and not add to map', () => {
 		const map = pipeWith(
 			Cell.createMap(),
